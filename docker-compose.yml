@@ -1,7 +1,7 @@
 services:
 
   # =========================
-  # 🟢 MONGODB DATABASE
+  # 🟢 MONGODB
   # =========================
   mongodb:
     image: mongo:7.0
@@ -21,16 +21,13 @@ services:
     networks:
       - medicare_network
 
-    # ✅ FIX IMPORTANT : healthcheck supprimé (cause d'erreur chez toi)
-    # Mongo est stable sans ça dans ton cas
 
   # =========================
-  # 🔵 BACKEND NODEJS
+  # 🔵 BACKEND
   # =========================
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile
 
     container_name: medicare_backend
     restart: unless-stopped
@@ -54,13 +51,13 @@ services:
     networks:
       - medicare_network
 
+
   # =========================
-  # 🟣 FRONTEND ANGULAR + NGINX
+  # 🟣 FRONTEND (NGINX)
   # =========================
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
 
     container_name: medicare_frontend
     restart: unless-stopped
@@ -71,18 +68,16 @@ services:
     depends_on:
       - backend
 
-    volumes:
-      # ✅ FIX IMPORTANT : chemin correct (pas ../)
-      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
-
     networks:
       - medicare_network
+
 
 # =========================
 # 💾 VOLUMES
 # =========================
 volumes:
   mongodb_data:
+
 
 # =========================
 # 🌐 NETWORK
